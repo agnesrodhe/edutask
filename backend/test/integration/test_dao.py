@@ -2,54 +2,58 @@ import pytest
 import unittest.mock as mock
 from unittest.mock import patch
 from src.util.dao import DAO
-from src.util.validators import getValidator
+
+import os
 
 @pytest.fixture
-def sut():
-    with patch("src.util.validators.getValidator") as mockedGetValidator:
-        mockedGetValidator.return_value = {
-    "$jsonSchema": {
-        "bsonType": "object",
-        "required": ["firstName", "lastName", "email"],
-        "properties": {
-            "firstName": {
-                "bsonType": "string",
-                "description": "the first name of a user must be determined"
-            }, 
-            "lastName": {
-                "bsonType": "string",
-                "description": "the last name of a user must be determined"
-            },
-            "email": {
-                "bsonType": "string",
-                "description": "the email address of a user must be determined",
-                "uniqueItems": True
-            },
-            "tasks": {
-                "bsonType": "array",
-                "items": {
-                    "bsonType": "objectId"
+@patch("src.util.dao.getValidator", autospec=True)
+def sut(mockedGetValidator):
+    mockedGetValidator.return_value = {
+        "$jsonSchema": {
+            "bsonType": "object",
+            "required": ["firstName", "lastName", "email"],
+            "properties": {
+                "firstName": {
+                    "bsonType": "string",
+                    "description": "the first name of a user must be determined"
+                }, 
+                "lastName": {
+                    "bsonType": "string",
+                    "description": "the last name of a user must be determined"
+                },
+                "email": {
+                    "bsonType": "string",
+                    "description": "the email address of a user must be determined",
+                    "uniqueItems": True
+                },
+                "tasks": {
+                    "bsonType": "array",
+                    "items": {
+                        "bsonType": "objectId"
+                    }
                 }
             }
         }
     }
-}
-        dao = DAO("test")
-        return dao
+
+    dao = DAO("test")
+    return dao
 
 @pytest.mark.integration
 def test_create_document_working(sut):
+    firstName = ("firstName", "Test")
+    lastName = ("lastName", "Testsson")
+    email = ("email", "test@test.com")
+
     validationResult = sut.create({
-        "firstName": "Test",
-        "lastName": "Testsson",
-        "email": "test@test.com"
+        firstName[0]: firstName[1],
+        lastName[0]: lastName[1],
+        email[0]: email[1],
         })
-    # validationResult = sut
-    assert validationResult == {
-        "firstName": "Test",
-        "lastName": "Testsson",
-        "email": "test@test.com"
-        }
+
+    assert validationResult[firstName[0]] == firstName[1]
+    assert validationResult[lastName[0]] == lastName[1]
+    assert validationResult[email[0]] == email[1]
     # assert validationResult == "hej"
     
     sut.collection.drop()
