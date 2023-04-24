@@ -6,47 +6,45 @@ from src.util.dao import DAO
 
 from pymongo.errors import WriteError
 
-import os
-
 @pytest.fixture
-@patch("src.util.dao.getValidator", autospec=True)
-def sut(mockedGetValidator):
-    validator_string = """
-    {
-        "$jsonSchema": {
-            "bsonType": "object",
-            "required": ["firstName", "lastName", "email"],
-            "properties": {
-                "firstName": {
-                    "bsonType": "string",
-                    "description": "the first name of a user must be determined"
-                }, 
-                "lastName": {
-                    "bsonType": "string",
-                    "description": "the last name of a user must be determined"
-                },
-                "email": {
-                    "bsonType": "string",
-                    "description": "the email address of a user must be determined",
-                    "uniqueItems": true
-                },
-                "tasks": {
-                    "bsonType": "array",
-                    "items": {
-                        "bsonType": "objectId"
+def sut():
+    with patch('src.util.dao.getValidator', autospec=True) as mockedGetValidator:
+        validator_string = """
+        {
+            "$jsonSchema": {
+                "bsonType": "object",
+                "required": ["firstName", "lastName", "email"],
+                "properties": {
+                    "firstName": {
+                        "bsonType": "string",
+                        "description": "the first name of a user must be determined"
+                    }, 
+                    "lastName": {
+                        "bsonType": "string",
+                        "description": "the last name of a user must be determined"
+                    },
+                    "email": {
+                        "bsonType": "string",
+                        "description": "the email address of a user must be determined",
+                        "uniqueItems": true
+                    },
+                    "tasks": {
+                        "bsonType": "array",
+                        "items": {
+                            "bsonType": "objectId"
+                        }
                     }
                 }
             }
         }
-    }
-    """
+        """
 
-    mockedGetValidator.return_value = json.loads(validator_string)
+        mockedGetValidator.return_value = json.loads(validator_string)
 
-    dao = DAO("test")
-    yield dao
+        dao = DAO("test")
+        yield dao
 
-    dao.collection.drop()
+        dao.collection.drop()
 
 @pytest.mark.integration
 def test_create_document_working(sut):
@@ -63,8 +61,6 @@ def test_create_document_working(sut):
     assert validationResult[firstName[0]] == firstName[1]
     assert validationResult[lastName[0]] == lastName[1]
     assert validationResult[email[0]] == email[1]
-    
-    #sut.collection.drop()
 
 @pytest.mark.integration
 def test_create_document_not_unique(sut):
@@ -79,8 +75,6 @@ def test_create_document_not_unique(sut):
         email[0]: email[1],
         })
 
-        #sut.collection.drop()
-
 @pytest.mark.integration
 def test_create_document_false_bson(sut):
     firstName = ("firstName", 123)
@@ -93,8 +87,6 @@ def test_create_document_false_bson(sut):
         lastName[0]: lastName[1],
         email[0]: email[1],
         })
-
-        #sut.collection.drop()
 
 @pytest.mark.integration
 def test_create_document_false_bson_not_unique(sut):
@@ -109,8 +101,6 @@ def test_create_document_false_bson_not_unique(sut):
         email[0]: email[1],
         })
 
-    #sut.collection.drop()
-
 @pytest.mark.integration
 def test_create_document_not_all_required(sut):
     lastName = ("lastName", "Testsson")
@@ -121,8 +111,6 @@ def test_create_document_not_all_required(sut):
         lastName[0]: lastName[1],
         email[0]: email[1],
         })
-
-    #sut.collection.drop()
 
 @pytest.mark.integration
 def test_create_document_not_all_required_not_unique(sut):
@@ -135,8 +123,6 @@ def test_create_document_not_all_required_not_unique(sut):
         email[0]: email[1],
         })
 
-    #sut.collection.drop()
-
 @pytest.mark.integration
 def test_create_document_not_all_required_false_bson(sut):
     lastName = ("lastName", 123)
@@ -148,8 +134,6 @@ def test_create_document_not_all_required_false_bson(sut):
         email[0]: email[1],
         })
 
-    #sut.collection.drop()
-
 @pytest.mark.integration
 def test_create_document_not_all_required_false_bson_not_unique(sut):
     lastName = ("lastName", 123)
@@ -160,6 +144,3 @@ def test_create_document_not_all_required_false_bson_not_unique(sut):
         lastName[0]: lastName[1],
         email[0]: email[1],
         })
-
-    sut.collection.drop()
-
