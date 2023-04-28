@@ -11,24 +11,19 @@ describe('testing R8UC1 add-button', () => {
           form: true,
           body:user
         }).then((response) => {
-          uid = response.body._id.$oid
-          name = user.firstName + ' ' + user.lastName
+          uid = response.body._id.$oid;
+          name = user.firstName + ' ' + user.lastName;
         })
       })
     
       cy.fixture('task.json')
         .then((task) => {
+          task["userid"] = uid;
             cy.request({
                 method: 'POST',
                 url: 'localhost:5001/tasks/create',
                 form: true,
-                body: {
-                    title: "VideoTask",
-                    url: "https://www.youtube.com/watch?v=JQ3E3ZpJQAk",
-                    userid: uid,
-                    todos: "Watch+video",
-                    description: "(add+a+description+here)"
-                }
+                body: task
             })
         })
     })
