@@ -19,7 +19,7 @@ function App() {
     data.append('lastName', details.lastName);
 
     // send a request to the server creating a new user
-    fetch('http://localhost:5000/users/create', {
+    fetch('http://localhost:5001/users/create', {
       method: 'post',
       body: data
     })
@@ -37,7 +37,7 @@ function App() {
    * @param {*} details Dict contaiing at least the email address of a user
    */
   const login = (details) => {
-    fetch(`http://localhost:5000/users/bymail/${details.email}`)
+    fetch(`http://localhost:5001/users/bymail/${details.email}`)
       .then(res => res.json())
       .then(userobj => {
         userobj['_id'] = userobj['_id']['$oid'];
