@@ -14,21 +14,21 @@ describe('testing R8UC1 add-button', () => {
         }).then((response) => {
           uid = response.body._id.$oid;
           name = user.firstName + ' ' + user.lastName;
+
+          cy.fixture('task.json')
+          .then((task) => {
+            task["userid"] = uid;
+              cy.request({
+                  method: 'POST',
+                  url: 'localhost:5001/tasks/create',
+                  form: true,
+                  body: task
+              }).then((response) => {
+                taskTitle = response.body[0].title;
+              })
+          })
         })
       })
-    
-      cy.fixture('task.json')
-        .then((task) => {
-          task["userid"] = uid;
-            cy.request({
-                method: 'POST',
-                url: 'localhost:5001/tasks/create',
-                form: true,
-                body: task
-            }).then((response) => {
-              taskTitle = response.body[0].title;
-            })
-        })
     })
 
   beforeEach(function() {
