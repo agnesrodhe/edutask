@@ -1,6 +1,7 @@
 describe('testing R8UC1 add-button', () => {
   let uid
   let name
+  let taskTitle
 
   before(function () {
     cy.fixture('user.json')
@@ -13,18 +14,21 @@ describe('testing R8UC1 add-button', () => {
         }).then((response) => {
           uid = response.body._id.$oid;
           name = user.firstName + ' ' + user.lastName;
-          cy.fixture('task.json')
-            .then((task) => {
-              task["userid"] = uid;
-                cy.request({
-                    method: 'POST',
-                    url: 'localhost:5001/tasks/create',
-                    form: true,
-                    body: task
-                })
+        })
+      })
+    
+      cy.fixture('task.json')
+        .then((task) => {
+          task["userid"] = uid;
+            cy.request({
+                method: 'POST',
+                url: 'localhost:5001/tasks/create',
+                form: true,
+                body: task
+            }).then((response) => {
+              taskTitle = response.body[0].title;
             })
         })
-      })  
     })
 
   beforeEach(function() {
@@ -35,27 +39,33 @@ describe('testing R8UC1 add-button', () => {
     .type('test@testande.com')
 
     cy.get('form')
-      .submit()
+    .submit()
+
+    cy.get('.container-element').eq(0)
+    .find('a')
+    .click()
   })
 
   it('start on the landing page', () => {
     cy.get('h1')
-      .should('contain.text', 'Your tasks, Testa Testing')
+    .find('span')
+    .should('contain.text', taskTitle)
   })
 
   it('when input field "title" is empty, the "Add" button should be disabled', () => {
-    cy.get('.submit-form')
+    cy.get('.inline-form')
       .find('input[type=submit]')
       .should('be.disabled')
   })
 
   it('when input field "title" is not empty, the "Add" button should be enabled', () => {
-    cy.get('.inputwrapper #title')
+    cy.get('.inline-form')
+    .find('input[type=text]')
     .type('test@testande.com')
 
-    cy.get('.submit-form')
-      .find('input[type=submit]')
-      .should('be.enabled')
+    cy.get('.inline-form')
+    .find('input[type=submit]')
+    .should('be.enabled')
   })
 
   after(function () {
