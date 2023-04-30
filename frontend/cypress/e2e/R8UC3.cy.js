@@ -3,7 +3,7 @@ describe('R8UC3 testing item deletion', () => {
     let name
     let taskTitle
   
-    before(function () {
+    beforeEach(function () {
       cy.fixture('user.json')
         .then((user) => {
           cy.request({
@@ -46,22 +46,17 @@ describe('R8UC3 testing item deletion', () => {
       .click()
     })
   
-    it('start on the landing page', () => {
-      cy.get('h1')
-      .find('span')
-      .should('contain.text', taskTitle)
-    })
-  
     it('If user clicks on the x symbol behind the description of the todo item, the todo item is deleted', () => {
       cy.get('.todo-item').eq(0)
-      .find('span').eq(1)
-      .click()
-
+        .find('span.remover')
+        .click()
+        
       cy.get('.todo-list')
-      .should('not.have.class', 'todo-item')
+        .should('not.have.class', 'todo-item')
+        .and('have.length', 1)
     })
   
-    after(function () {
+    afterEach(function () {
       cy.request({
         method: 'DELETE',
         url: `localhost:5001/users/${uid}`

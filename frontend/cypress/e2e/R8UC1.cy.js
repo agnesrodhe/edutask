@@ -35,21 +35,21 @@ describe('testing R8UC1 add-button', () => {
     cy.visit('localhost:3000')
 
     cy.contains('div', 'Email Address')
-    .find('input[type=text]')
-    .type('test@testande.com')
+      .find('input[type=text]')
+      .type('test@testande.com')
 
     cy.get('form')
-    .submit()
+      .submit()
 
     cy.get('.container-element').eq(0)
-    .find('a')
-    .click()
+      .find('a')
+      .click()
   })
 
   it('start on the landing page', () => {
     cy.get('h1')
-    .find('span')
-    .should('contain.text', taskTitle)
+      .find('span')
+      .should('contain.text', taskTitle)
   })
 
   it('when input field "title" is empty, the "Add" button should be disabled', () => {
@@ -60,12 +60,12 @@ describe('testing R8UC1 add-button', () => {
 
   it('when input field "title" is not empty, the "Add" button should be enabled', () => {
     cy.get('.inline-form')
-    .find('input[type=text]')
-    .type('test@testande.com')
+      .find('input[type=text]')
+      .type('test@testande.com')
 
     cy.get('.inline-form')
-    .find('input[type=submit]')
-    .should('be.enabled')
+      .find('input[type=submit]')
+      .should('be.enabled')
   })
 
   after(function () {

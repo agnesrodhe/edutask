@@ -34,11 +34,12 @@ describe('user click on icon', () => {
     .find('input[type=text]')
     .type('test@testande.com')
 
-    // cy.get('form')
-    //   .submit()
+    cy.get('form')
+      .submit()
 
-    // cy.get('img')
-    //   .click()
+      cy.get('.container-element').eq(0)
+        .find('a')
+        .click()
   })
 
   // it('test test', () => {
@@ -47,13 +48,18 @@ describe('user click on icon', () => {
   // })
 
   it('toggle is pressed, todo item is struck through', () => {
+    cy.get('li.todo-item')
+      .get('span.checker')
+      .click()
+
     // cy.get('li.todo-item')
     //   .get('span.checker')
-    //   .click()
     //   .click()
 
     // cy.get('li.todo-item')
     //   .get('span.editable')
+    //   .invoke('css', 'text-decoration')
+    //   .should('include', 'line-through')
 
   })
 
