@@ -2,7 +2,7 @@ describe('user click on icon', () => {
   let uid
   let name
 
-  before(function () {
+  beforeEach(function () {
     cy.fixture('user.json')
       .then((user) => {
         cy.request({
@@ -42,43 +42,35 @@ describe('user click on icon', () => {
         .click()
   })
 
-  // it('test test', () => {
-  //   cy.get('h1')
-  //     .should('contain.text', 'VideoTask')
-  // })
+  it('toggle is pressed, todo item is struck through', () => {
+    cy.get('li.todo-item')
+      .get('span.checker')
+      .click()
+
+    cy.get('li.todo-item')
+      .get('span.checker')
+      .should('have.class', 'checked')
+
+    cy.get('li.todo-item')
+      .get('ul.todo-list > li.todo-item > span.checker.checked + span.editable')
+      .should('have.css', 'text-decoration', 'line-through solid rgb(49, 46, 46)')
+  })
 
   it('toggle is pressed, todo item is struck through', () => {
     cy.get('li.todo-item')
       .get('span.checker')
       .click()
 
-    // cy.get('li.todo-item')
-    //   .get('span.checker')
-    //   .click()
+    cy.get('li.todo-item')
+      .get('span.checker')
+      .should('have.class', 'unchecked')
 
-    // cy.get('li.todo-item')
-    //   .get('span.editable')
-    //   .invoke('css', 'text-decoration')
-    //   .should('include', 'line-through')
-
+    cy.get('li.todo-item')
+      .get('span.editable')
+      .should('not.have.css', 'text-decoration', 'line-through solid rgb(49, 46, 46)')
   })
 
-  // it('when input field "title" is empty, the "Add" button should be disabled', () => {
-  //   cy.get('.submit-form')
-  //     .find('input[type=submit]')
-  //     .should('be.disabled')
-  // })
-
-  // it('when input field "title" is not empty, the "Add" button should be enabled', () => {
-  //   cy.get('.inputwrapper #title')
-  //   .type('test@testande.com')
-
-  //   cy.get('.submit-form')
-  //     .find('input[type=submit]')
-  //     .should('be.enabled')
-  // })
-
-  after(function () {
+  afterEach(function () {
     cy.request({
       method: 'DELETE',
       url: `localhost:5001/users/${uid}`
