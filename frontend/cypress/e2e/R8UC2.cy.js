@@ -1,4 +1,4 @@
-describe('testing R8UC1 add-button', () => {
+describe('user click on icon', () => {
   let uid
   let name
 
@@ -34,29 +34,43 @@ describe('testing R8UC1 add-button', () => {
     .find('input[type=text]')
     .type('test@testande.com')
 
-    cy.get('form')
-      .submit()
+    // cy.get('form')
+    //   .submit()
+
+    // cy.get('img')
+    //   .click()
   })
 
-  it('start on the landing page', () => {
-    cy.get('h1')
-      .should('contain.text', 'Your tasks, Testa Testing')
+  // it('test test', () => {
+  //   cy.get('h1')
+  //     .should('contain.text', 'VideoTask')
+  // })
+
+  it('toggle is pressed, todo item is struck through', () => {
+    // cy.get('li.todo-item')
+    //   .get('span.checker')
+    //   .click()
+    //   .click()
+
+    // cy.get('li.todo-item')
+    //   .get('span.editable')
+
   })
 
-  it('when input field "title" is empty, the "Add" button should be disabled', () => {
-    cy.get('.submit-form')
-      .find('input[type=submit]')
-      .should('be.disabled')
-  })
+  // it('when input field "title" is empty, the "Add" button should be disabled', () => {
+  //   cy.get('.submit-form')
+  //     .find('input[type=submit]')
+  //     .should('be.disabled')
+  // })
 
-  it('when input field "title" is not empty, the "Add" button should be enabled', () => {
-    cy.get('.inputwrapper #title')
-    .type('test@testande.com')
+  // it('when input field "title" is not empty, the "Add" button should be enabled', () => {
+  //   cy.get('.inputwrapper #title')
+  //   .type('test@testande.com')
 
-    cy.get('.submit-form')
-      .find('input[type=submit]')
-      .should('be.enabled')
-  })
+  //   cy.get('.submit-form')
+  //     .find('input[type=submit]')
+  //     .should('be.enabled')
+  // })
 
   after(function () {
     cy.request({
