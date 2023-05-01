@@ -56,7 +56,7 @@ describe('user click on icon', () => {
       .should('have.css', 'text-decoration', 'line-through solid rgb(49, 46, 46)')
   })
 
-  it('toggle is pressed, todo item is struck through', () => {
+  it('toggle is pressed, todo item is not struck through', () => {
     cy.get('li.todo-item')
       .get('span.checker')
       .click()
