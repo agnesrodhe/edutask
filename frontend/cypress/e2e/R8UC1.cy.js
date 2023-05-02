@@ -3,7 +3,7 @@ describe('testing R8UC1 add-button', () => {
   let name
   let taskTitle
 
-  before(function () {
+  beforeEach(function () {
     cy.fixture('user.json')
       .then((user) => {
         cy.request({
@@ -53,6 +53,8 @@ describe('testing R8UC1 add-button', () => {
   })
 
   it('when input field "title" is not empty, the "Add" button should be enabled, new todo item is created and added to the bottom', () => {
+    cy.viewport(1000, 800)
+
     cy.get('.inline-form')
       .find('input[type=text]')
       .type('test@testande.com')
@@ -70,7 +72,7 @@ describe('testing R8UC1 add-button', () => {
       .should('contain.text', 'test@testande.com')
   })
 
-  after(function () {
+  afterEach(function () {
     cy.request({
       method: 'DELETE',
       url: `localhost:5001/users/${uid}`
