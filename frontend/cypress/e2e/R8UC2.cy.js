@@ -37,9 +37,9 @@ describe('user click on icon', () => {
     cy.get('form')
       .submit()
 
-      cy.get('.container-element').eq(0)
-        .find('a')
-        .click()
+    cy.get('.container-element').eq(0)
+      .find('a')
+      .click()
   })
 
   it('toggle is pressed, todo item is struck through', () => {
