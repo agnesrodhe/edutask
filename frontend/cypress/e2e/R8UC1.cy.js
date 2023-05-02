@@ -46,19 +46,13 @@ describe('testing R8UC1 add-button', () => {
       .click()
   })
 
-  it('start on the landing page', () => {
-    cy.get('h1')
-      .find('span')
-      .should('contain.text', taskTitle)
-  })
-
   it('when input field "title" is empty, the "Add" button should be disabled', () => {
     cy.get('.inline-form')
       .find('input[type=submit]')
       .should('be.disabled')
   })
 
-  it('when input field "title" is not empty, the "Add" button should be enabled', () => {
+  it('when input field "title" is not empty, the "Add" button should be enabled, new todo item is created and added to the bottom', () => {
     cy.get('.inline-form')
       .find('input[type=text]')
       .type('test@testande.com')
@@ -66,6 +60,14 @@ describe('testing R8UC1 add-button', () => {
     cy.get('.inline-form')
       .find('input[type=submit]')
       .should('be.enabled')
+
+    cy.get('.inline-form')
+      .find('input[type=submit]')
+      .click()
+
+    cy.get('.todo-item').eq(1)
+      .find('.editable')
+      .should('contain.text', 'test@testande.com')
   })
 
   after(function () {

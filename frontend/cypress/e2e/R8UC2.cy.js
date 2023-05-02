@@ -47,6 +47,8 @@ describe('user click on icon', () => {
       .get('span.checker')
       .click()
 
+    cy.wait(500)
+
     cy.get('li.todo-item')
       .get('span.checker')
       .should('have.class', 'checked')
@@ -70,7 +72,7 @@ describe('user click on icon', () => {
       .should('not.have.css', 'text-decoration', 'line-through solid rgb(49, 46, 46)')
   })
 
-  afterEach(function () {
+  after(function () {
     cy.request({
       method: 'DELETE',
       url: `localhost:5001/users/${uid}`
