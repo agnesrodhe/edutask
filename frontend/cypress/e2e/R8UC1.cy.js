@@ -1,5 +1,6 @@
 describe('testing R8UC1 add-button', () => {
   let uid
+  let name
   let taskTitle
 
   before(function () {
@@ -11,7 +12,6 @@ describe('testing R8UC1 add-button', () => {
           form: true,
           body:user
         }).then((response) => {
-          console.log(response.body._id.$oid)
           uid = response.body._id.$oid;
           name = user.firstName + ' ' + user.lastName;
         })
@@ -57,7 +57,7 @@ describe('testing R8UC1 add-button', () => {
 
     cy.get('.inline-form')
       .find('input[type=text]')
-      .type('Newtask')
+      .type('test@testande.com')
 
     cy.get('.inline-form')
       .find('input[type=submit]')
@@ -69,20 +69,16 @@ describe('testing R8UC1 add-button', () => {
 
     cy.get('.todo-item').eq(1)
       .find('.editable')
-      .should('contain.text', 'Newtask')
+      .should('contain.text', 'test@testande.com')
   })
 
   after(function () {
     cy.request({
-      method: 'GET',
-      url: `localhost:5001/users/all`
+      method: 'DELETE',
+      url: `localhost:5001/users/${uid}`
     }).then((response) => {
-      cy.request({
-        method: 'DELETE',
-        url: `localhost:5001/users/${response.body[0]._id.$oid}`
-      }).then((response) => {
-        cy.log(response.body)
-      })
+      cy.log(response.body)
     })
   })
+
 })
