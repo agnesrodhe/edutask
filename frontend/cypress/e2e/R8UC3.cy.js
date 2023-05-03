@@ -3,7 +3,7 @@ describe('R8UC3 testing item deletion', () => {
     let name
     let taskTitle
   
-    beforeEach(function () {
+    before(function () {
       cy.fixture('user.json')
         .then((user) => {
           cy.request({
@@ -56,7 +56,7 @@ describe('R8UC3 testing item deletion', () => {
         .and('have.length', 1)
     })
   
-    afterEach(function () {
+    after(function () {
       cy.request({
         method: 'DELETE',
         url: `localhost:5001/users/${uid}`

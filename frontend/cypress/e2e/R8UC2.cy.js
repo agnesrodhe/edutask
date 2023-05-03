@@ -2,7 +2,7 @@ describe('user click on icon', () => {
   let uid
   let name
 
-  beforeEach(function () {
+  before(function () {
     cy.fixture('user.json')
       .then((user) => {
         cy.request({
