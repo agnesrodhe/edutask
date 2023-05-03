@@ -56,13 +56,17 @@ describe('R8UC3 testing item deletion', () => {
         .and('have.length', 1)
     })
   
-    afterEach(function () {
+    after(function () {
       cy.request({
-        method: 'DELETE',
-        url: `localhost:5001/users/${uid}`
+        method: 'GET',
+        url: `localhost:5001/users/all`
       }).then((response) => {
-        cy.log(response.body)
+        cy.request({
+          method: 'DELETE',
+          url: `localhost:5001/users/${response.body[0]._id.$oid}`
+        }).then((response) => {
+          cy.log(response.body)
+        })
       })
     })
-  
   })
