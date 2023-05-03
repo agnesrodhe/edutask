@@ -1,9 +1,8 @@
 describe('testing R8UC1 add-button', () => {
   let uid
-  let name
   let taskTitle
 
-  beforeEach(function () {
+  before(function () {
     cy.fixture('user.json')
       .then((user) => {
         cy.request({
@@ -12,6 +11,7 @@ describe('testing R8UC1 add-button', () => {
           form: true,
           body:user
         }).then((response) => {
+          console.log(response.body._id.$oid)
           uid = response.body._id.$oid;
           name = user.firstName + ' ' + user.lastName;
         })
@@ -57,7 +57,7 @@ describe('testing R8UC1 add-button', () => {
 
     cy.get('.inline-form')
       .find('input[type=text]')
-      .type('test@testande.com')
+      .type('Newtask')
 
     cy.get('.inline-form')
       .find('input[type=submit]')
@@ -69,16 +69,20 @@ describe('testing R8UC1 add-button', () => {
 
     cy.get('.todo-item').eq(1)
       .find('.editable')
-      .should('contain.text', 'test@testande.com')
+      .should('contain.text', 'Newtask')
   })
 
-  afterEach(function () {
+  after(function () {
     cy.request({
-      method: 'DELETE',
-      url: `localhost:5001/users/${uid}`
+      method: 'GET',
+      url: `localhost:5001/users/all`
     }).then((response) => {
-      cy.log(response.body)
+      cy.request({
+        method: 'DELETE',
+        url: `localhost:5001/users/${response.body[0]._id.$oid}`
+      }).then((response) => {
+        cy.log(response.body)
+      })
     })
   })
-
 })
