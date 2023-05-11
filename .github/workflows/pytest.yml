@@ -21,12 +21,12 @@ jobs:
           cache: 'pip'
 
       - name: Install dependencies
+        working-directory:
+          ./backend
         run:
-          cd backend
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       
       - name: Unit Tests
         run:
-          cd backend
           python -m pytest -m unit
