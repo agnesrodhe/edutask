@@ -1,6 +1,7 @@
 describe('user click on icon', () => {
   let uid
   let name
+  let taskid
 
   before(function () {
     cy.fixture('user.json')
@@ -22,6 +23,8 @@ describe('user click on icon', () => {
                   url: 'localhost:5001/tasks/create',
                   form: true,
                   body: task
+              }).then((res) => {
+                taskid = res.body[0]._id.$oid;
               })
             })
         })
@@ -44,6 +47,22 @@ describe('user click on icon', () => {
   })
 
   it('toggle is pressed, todo item is struck through', () => {
+    cy.request({
+      method: 'GET',
+      url: `localhost:5001/tasks/byid/${taskid}`
+    }).then((response) => {
+      cy.request({
+        method: 'PUT',
+        url: `http://localhost:5001/todos/byid/${response.body.todos[0]._id.$oid}`,
+        form: true,
+        body: {
+          data: "{'$set': {'done': false}}"
+        },
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      })
+    })
     cy.get('li.todo-item')
       .get('span.checker')
       .click()
@@ -60,6 +79,22 @@ describe('user click on icon', () => {
   })
 
   it('toggle is pressed, todo item is not struck through', () => {
+    cy.request({
+      method: 'GET',
+      url: `localhost:5001/tasks/byid/${taskid}`
+    }).then((response) => {
+      cy.request({
+        method: 'PUT',
+        url: `http://localhost:5001/todos/byid/${response.body.todos[0]._id.$oid}`,
+        form: true,
+        body: {
+          data: "{'$set': {'done': true}}"
+        },
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      })
+    })
     cy.get('li.todo-item')
       .get('span.checker')
       .click()
